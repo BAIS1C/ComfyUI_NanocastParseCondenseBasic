@@ -1,17 +1,21 @@
+import os
 import requests
+from dotenv import load_dotenv
 from comfyui.core.node import Node, Input, Output
+
+load_dotenv()  # Load environment variables from a .env file
 
 class NanocastParseCondenseBasic(Node):
     def __init__(self):
         super().__init__()
         self.api_endpoint = "http://localhost:8000/api"
-        self.api_key = "sk-5f806ca081db4f6abc88e89532e50624"
+        self.api_key = os.getenv("API_KEY")  # Retrieve the API key from environment variables
 
     @Input("text")
     def parse_and_condense(self, text):
         prompt = (
             f"Here is some news feed content: {text}\n"
-            "You will create a narrative summary/script of this article. 1 article runs from Title to teh next title. "
+            "You will create a narrative summary/script of this article. 1 article runs from Title to the next title. "
             "Highlight 15-30 prompts that will generate images relating to this story. "
             "Split these two outputs into 'narration' and 'image_prompts'."
         )
@@ -40,6 +44,10 @@ class NanocastParseCondenseBasic(Node):
     def get_image_prompts_output(self):
         return self.parse_and_condense("")[1]
 
-def register():
-    node = NanocastParseCondenseBasic()
-    ComfyUI.register_node(node)
+NODE_CLASS_MAPPINGS = {
+    "NanocastParseCondenseBasic": NanocastParseCondenseBasic
+}
+
+NODE_DISPLAY_NAME_MAPPINGS = {
+    "NanocastParseCondenseBasic": "Ollama Parse and Condense"
+}
