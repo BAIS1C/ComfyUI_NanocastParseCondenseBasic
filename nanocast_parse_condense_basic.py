@@ -11,8 +11,8 @@ class NanocastParseCondenseBasic(Node):
     def parse_and_condense(self, text):
         prompt = (
             f"Here is some news feed content: {text}\n"
-            "You will create a 1-minute narration summary of this article. "
-            "Highlight 30 prompts that will generate images relating to this story. "
+            "You will create a narrative summary/script of this article. 1 article runs from Title to teh next title. "
+            "Highlight 15-30 prompts that will generate images relating to this story. "
             "Split these two outputs into 'narration' and 'image_prompts'."
         )
 
@@ -34,13 +34,12 @@ class NanocastParseCondenseBasic(Node):
 
     @Output("narration")
     def get_narration_output(self):
-        return self.parse_and_condense()[0]
+        return self.parse_and_condense("")[0]
 
     @Output("image_prompts")
     def get_image_prompts_output(self):
-        return self.parse_and_condense()[1]
+        return self.parse_and_condense("")[1]
 
-# Register the node with ComfyUI
 def register():
     node = NanocastParseCondenseBasic()
     ComfyUI.register_node(node)
