@@ -34,12 +34,13 @@ class NanocastParseCondenseBasic(Node):
 
     @Output("narration")
     def get_narration_output(self):
-        return self.parse_and_condense[0]
+        return self.parse_and_condense()[0]
 
     @Output("image_prompts")
     def get_image_prompts_output(self):
-        return self.parse_and_condense[1]
+        return self.parse_and_condense()[1]
 
 # Register the node with ComfyUI
-node = NanocastParseCondenseBasic()
-ComfyUI.register_node(node)
+def register():
+    node = NanocastParseCondenseBasic()
+    ComfyUI.register_node(node)
